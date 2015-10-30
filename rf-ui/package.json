@@ -1,0 +1,22 @@
+{
+  "name": "rf-ui",
+  "version": "0.0.0",
+  "main": "lib/index.js",
+  "directories": {
+    "lib": "lib/"
+  },
+  "dependencies": {
+    "css-loader": "^0.21.0",
+    "react": "^0.14.1",
+    "style-loader": "^0.13.0"
+  },
+  "scripts": {
+    "build": "npm install && scripts/build.js"
+  },
+  "devDependencies": {
+    "gulp": "^3.9.0",
+    "gulp-babel": "^5.3.0",
+    "gulp-less": "^3.0.3",
+    "gulp-replace": "^0.5.4"
+  }
+}
