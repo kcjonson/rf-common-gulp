@@ -26,6 +26,6 @@
     "webpack": "*"
   },
   "scripts": {
-    "start": "gulp && node server.js"
+    "start": "bower install && gulp && node server.js"
   }
 }
