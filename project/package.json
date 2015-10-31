@@ -4,6 +4,7 @@
   "description": "A basic webpack example",
   "author": "Kevin Jonson <kevin@redfin.com>",
   "dependencies": {
+    "del": "^2.0.2",
     "envify": "*",
     "express": "*",
     "extract-text-webpack-plugin": "^0.8.2",

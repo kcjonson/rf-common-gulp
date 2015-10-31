@@ -1,0 +1,23 @@
+{
+  "name": "project",
+  "description": "A basic webpack example",
+  "main": "",
+  "authors": [
+    "Kevin Jonson <kevin@redfin.com>"
+  ],
+  "license": "MIT",
+  "homepage": "https://github.com/kcjonson/rf-common-gulp",
+  "moduleType": [],
+  "private": true,
+  "directory" : "target/web_modules",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "rf-ui": "git://github.com/kcjonson/rf-common-gulp"
+  }
+}
