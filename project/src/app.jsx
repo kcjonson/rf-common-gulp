@@ -10,8 +10,8 @@ var initialStateHTML = document.getElementById('initial-state').innerHTML;
 var initialState = initialStateHTML ? JSON.parse(initialStateHTML) : {}
 
 ReactDOM.render(
-	<Base 
+	<Base
 		user={initialState.user}
-	/>, 
+	/>,
 	document.getElementById('react-app')
 );

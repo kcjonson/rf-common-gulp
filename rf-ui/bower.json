@@ -1,0 +1,19 @@
+{
+  "name": "rf-ui",
+  "description": "",
+  "main": "lib/index.js",
+  "authors": [
+    "Doug Wade <doug.wade@redfin.com>"
+  ],
+  "license": "MIT",
+  "homepage": "https://github.com/kcjonson/rf-common-gulp",
+  "moduleType": [],
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}

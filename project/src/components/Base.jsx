@@ -1,6 +1,8 @@
 var React = require('react');
 var request = require('superagent')
-var Button = require('rf-ui/Button');
+
+//The double rf-ui we should fix by making rf-ui its own repo
+var Button = require('rf-ui/rf-ui/lib/Button');
 
 require('./Base.less');
 
