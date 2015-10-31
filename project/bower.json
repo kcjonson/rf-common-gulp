@@ -1,7 +1,7 @@
 {
   "name": "project",
   "description": "A basic webpack example",
-  "main": "",
+  "main": "target/web_modules",
   "authors": [
     "Kevin Jonson <kevin@redfin.com>"
   ],
@@ -9,7 +9,6 @@
   "homepage": "https://github.com/kcjonson/rf-common-gulp",
   "moduleType": [],
   "private": true,
-  "directory" : "target/web_modules",
   "ignore": [
     "**/.*",
     "node_modules",

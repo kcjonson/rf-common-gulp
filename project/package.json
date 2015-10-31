@@ -4,6 +4,7 @@
   "description": "A basic webpack example",
   "author": "Kevin Jonson <kevin@redfin.com>",
   "dependencies": {
+    "bower-webpack-plugin": "^0.1.9",
     "del": "^2.0.2",
     "envify": "*",
     "express": "*",
@@ -26,6 +27,6 @@
     "webpack": "*"
   },
   "scripts": {
-    "start": "bower install && gulp && node server.js"
+    "start": "gulp clean && bower install && gulp && node server.js"
   }
 }
