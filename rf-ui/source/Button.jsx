@@ -1,10 +1,6 @@
 import React from 'react';
 
-//import './Button.less';
-
-
-import './Button.test';
-
+import './Button.less';
 
 export default class Button extends React.Component {
 

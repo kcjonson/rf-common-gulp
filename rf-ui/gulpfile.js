@@ -6,13 +6,14 @@ var replace = require('gulp-replace');
 
 gulp.task('default', ['build']);
 
-gulp.task('build', ['build-js', 'build-css']);
+gulp.task('build', ['build-jsx', 'build-css']);
 
-gulp.task('build-js', function(){
+
+
+gulp.task('build-jsx', function(){
 	console.log('Starting gulp task: build-js')
 
 	gulp.src("./source/**/*.jsx")
-		.pipe(removeCSSImports())
 		.pipe(babel({
 			modules:"common"
 		}))
@@ -27,6 +28,8 @@ gulp.task('build-css', function(){
 })
 
 
-function removeCSSImports(imputStream) {
-	return inputStream;
-}
+gulp.task('index', function(){
+	// TODO: This should be automated, not manual.
+	gulp.src('./source/index.js')
+		.pipe(gulp.dest('./lib'));
+});

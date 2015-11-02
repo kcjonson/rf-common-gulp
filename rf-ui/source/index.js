@@ -1,3 +1,3 @@
-'use strict';
-
-module.exports = {foo: 'bar'}
+module.exports = {
+	'Button': require('./Button')
+}

@@ -18,30 +18,30 @@ var _react = require('react');
 
 var _react2 = _interopRequireDefault(_react);
 
-require('./Button.css');
+require('./Button.less');
 
-var Foo = (function (_React$Component) {
-	_inherits(Foo, _React$Component);
+var Button = (function (_React$Component) {
+	_inherits(Button, _React$Component);
 
-	function Foo() {
-		_classCallCheck(this, Foo);
+	function Button() {
+		_classCallCheck(this, Button);
 
-		_get(Object.getPrototypeOf(Foo.prototype), 'constructor', this).apply(this, arguments);
+		_get(Object.getPrototypeOf(Button.prototype), 'constructor', this).apply(this, arguments);
 	}
 
-	_createClass(Foo, [{
+	_createClass(Button, [{
 		key: 'render',
 		value: function render() {
 			return _react2['default'].createElement(
-				'div',
+				'button',
 				{ className: 'Button' },
-				'I am taco!'
+				'I am button.'
 			);
 		}
 	}]);
 
-	return Foo;
+	return Button;
 })(_react2['default'].Component);
 
-exports['default'] = Foo;
+exports['default'] = Button;
 module.exports = exports['default'];

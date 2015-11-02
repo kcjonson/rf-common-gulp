@@ -1,91 +1,107 @@
 var gulp = require("gulp");
-var babel = require("gulp-babel");
-var less = require("gulp-less");
-var replace = require('gulp-replace');
 var webpack = require("gulp-webpack");
+var path = require('path');
+var ExtractTextPlugin = require("extract-text-webpack-plugin");
+var fs = require('fs')
 
 
-gulp.task('default', ['server', 'browser', 'public']);
+
+
+
+gulp.task('default', ['server-webpack', 'browser-webpack', 'public']);
 
 
 
 
+// Common Config
+// NOTE: There is a better way to do this.
+var ALIAS = {'rf-ui': path.resolve(__dirname, '../rf-ui/lib')}
+var EXTENSIONS = ['', '.js', '.jsx', 'less', 'css']
+var ROOT = path.resolve(__dirname, './src')
+var MODULE = {
+	loaders: [
+		{ test: /\.jsx$/, loader: 'babel' },
+		{ test: /\.less$/, loader: ExtractTextPlugin.extract("style-loader", "css-loader", "less-loader") },
+		{ test: /\.css$/, loader: ExtractTextPlugin.extract("style-loader", "css-loader") }
+	]
+}
+// https://github.com/webpack/webpack/issues/839
+// NOTE: Default node modules must be installed or this doesnt work (e.g. fs, path)
+var node_modules = fs.readdirSync('node_modules').filter(function(x) { return x !== '.bin' });
+
+
+
+
+
+
+
+//
 // Server Code Steps
+//
 
-gulp.task('server', [
-	'html',
-	'compile-server-less',
-	'compile-server-jsx',
-	'install-server-common-modules-js',
-	'intall-server-common-modules-css'
-]);
+// NOTE: The server bundle is currently still creating a CSS bundle, and it probally doesn't have to
+//        However, the null-loader does not appear to be working on components that are resolved via
+//		  the alias.  Works great for things in this project, but errors out otherwise.
+var SERVER_WEBPACK_CONFIG = {
+    output: {
+		path: __dirname,
+        filename: "target/server/bundle.js",
+        libraryTarget: "commonjs2"
+    },
+    module: MODULE,
+    externals: node_modules,
+    resolve: {
+        root: ROOT,
+        extensions: EXTENSIONS,
+        alias: ALIAS
+    },
+    target: 'node',
+    plugins: [
+        new ExtractTextPlugin("target/server/bundle.css")
+    ]
+};
 
-// Compile project source less for server
-// CSS Files choke the node imports on the server side, so 
-// we're going to rewrite them to valid JS that does nothing.
-// This is a total hack.
-gulp.task('compile-server-less', function(){
-	return gulp.src("src/**/*.less")
-		.pipe(replace(/[^]*/, 'module.exports = null;'))
-		.pipe(gulp.dest('target/server'))
-});
-
-// Compile project source JSX for server
-gulp.task("compile-server-jsx", ['compile-server-less', 'install-server-common-modules-js'], function () {
-	return gulp.src("src/**/*.jsx")
-		.pipe(babel())
-		.pipe(gulp.dest("target/server"));
-});
-
-// Copy common modules to the node_modules directory
-gulp.task("install-server-common-modules-js", ['intall-server-common-modules-css'], function(){
-	return gulp.src("../rf-ui/lib/**/*.js")
-		.pipe(gulp.dest('node_modules/rf-ui'))
-});
-
-// Create stubs for common module css in the node_modules directory
-gulp.task("intall-server-common-modules-css", function(){
-	return gulp.src("../rf-ui/lib/**/*.css")
-		.pipe(replace(/[^]*/, 'module.exports = null;'))
-		.pipe(gulp.dest('node_modules/rf-ui'))
+gulp.task('server-webpack', function() {
+	return gulp.src('./src/server.js')
+		.pipe(webpack(SERVER_WEBPACK_CONFIG))
+		.pipe(gulp.dest(''));
 });
 
 
 
 
 
+//
 // Browser Code Steps
+//
 
-gulp.task('browser',[
-	'webpack',
-	'compile-browser-less',
-	'compile-browser-jsx',
-	'install-browser-common-modules'
-]);
+var BROWSER_WEBPACK_CONFIG = {
+    output: {
+		path: __dirname,
+        filename: "target/browser/bundle.js"
+    },
+    module: MODULE,
+    externals: node_modules,
+    resolve: {
+        root: ROOT,
+        extensions: EXTENSIONS,
+        alias: ALIAS
+    },
+    plugins: [
+        new ExtractTextPlugin("target/browser/bundle.css")
+    ]
+};
 
-// Compile project source less for browser
-gulp.task('compile-browser-less', function() {
-	return gulp.src("src/**/*.less")
-		.pipe(less())
-		.pipe(gulp.dest('target/browser'));
+gulp.task('browser-webpack', function() {
+	return gulp.src('./src/browser.jsx')
+		.pipe(webpack(BROWSER_WEBPACK_CONFIG))
+		.pipe(gulp.dest(''));
 });
 
-// Compile project source JSX for browser
-gulp.task("compile-browser-jsx", ['compile-browser-less'], function () {
-	return gulp.src("src/**/*.jsx")
-		.pipe(replace('.less', '.css'))
-		.pipe(babel())
-		.pipe(gulp.dest("target/browser"));
-});
 
-// Copy common modules into the we_modules folder so that webpack/browser
-// dependencies can get them.  
-// NOTE: The output from common modules should alredy be compiled, we just copy.
-// NOTE: Webpack automatically looks in the web_modules folder, no config needed.
-gulp.task("install-browser-common-modules", function(){
-	return gulp.src("../rf-ui/lib/**/*")
-		.pipe(gulp.dest('target/web_modules/rf-ui'))
-})
+
+
+
 
 
 
@@ -93,20 +109,15 @@ gulp.task("install-browser-common-modules", function(){
 
 
 // Public Steps  
+// NOTE: This is largely just for the demo project.  Feel free to ignore.
 
-gulp.task('public', ['html', 'webpack'])
-
-// Run webpack on the /target/browser folder
-gulp.task('webpack', ['install-browser-common-modules', 'compile-browser-jsx'], function(){
-	return gulp.src('./target/browser/app.js')
-		.pipe(webpack(require('./webpack.config.js')))
-		.pipe(gulp.dest(''));
-});
+gulp.task('public', ['html'])
 
 // Copy the page so that we can serve it.
 gulp.task('html', function(){
 	return gulp.src("src/**/*.html")
-		.pipe(gulp.dest('target/public'));
+		.pipe(gulp.dest('target/server'))
+		.pipe(gulp.dest('target/browser'));
 });
 
 
