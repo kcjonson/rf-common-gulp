@@ -1,3 +1,5 @@
+var ExtractTextPlugin = require("extract-text-webpack-plugin");
+var path = require('path');
 var gulp = require("gulp");
 var babel = require("gulp-babel");
 var less = require("gulp-less");
@@ -96,10 +98,29 @@ gulp.task("install-browser-common-modules", function(){
 
 gulp.task('public', ['html', 'webpack'])
 
+var WEBPACK_CONFIG = {
+    entry: "./target/browser/app.js",
+    output: {
+        path: __dirname,
+        filename: "target/public/bundle.js"
+    },
+    resolve: {
+        root: path.resolve(__dirname, './target/browser/')
+    },
+    module: {
+        loaders: [
+            { test: /\.css$/, loader: ExtractTextPlugin.extract("style-loader", "css-loader") }
+        ]
+    },
+    plugins: [
+        new ExtractTextPlugin("./target/public/bundle.css")
+    ]
+};
+
 // Run webpack on the /target/browser folder
 gulp.task('webpack', ['install-browser-common-modules', 'compile-browser-jsx'], function(){
 	return gulp.src('./target/browser/app.js')
-		.pipe(webpack(require('./webpack.config.js')))
+		.pipe(webpack(WEBPACK_CONFIG))
 		.pipe(gulp.dest(''));
 });
 
