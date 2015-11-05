@@ -17,6 +17,7 @@
   },
   "devDependencies": {
     "css-loader": "*",
+    "del": "^2.0.2",
     "gulp-less": "^3.0.3",
     "gulp-replace": "^0.5.4",
     "less-loader": "*",
@@ -25,6 +26,7 @@
     "webpack": "*"
   },
   "scripts": {
+    "clean": "gulp clean",
     "start": "gulp && node server.js"
   }
 }

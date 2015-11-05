@@ -5,6 +5,7 @@ var babel = require("gulp-babel");
 var less = require("gulp-less");
 var replace = require('gulp-replace');
 var webpack = require("gulp-webpack");
+var del = require('del');
 
 
 gulp.task('default', ['server', 'browser', 'public']);
@@ -130,4 +131,9 @@ gulp.task('html', function(){
 		.pipe(gulp.dest('target/public'));
 });
 
+gulp.task('clean', function(){
+	del(['target/**/*', 'node_modules/rf-ui']).then(function (paths) {
+		console.log('Deleted files/folders:\n', paths.join('\n'));
+	});
+})
 
