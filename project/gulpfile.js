@@ -8,15 +8,33 @@ var webpack = require("gulp-webpack");
 var del = require('del');
 
 
+
+var WEBPACK_CONFIG = {
+    entry: "./target/app.js",
+    output: {
+        path: __dirname,
+        filename: "target-public/bundle.js"
+    },
+    resolve: {
+        root: path.resolve(__dirname, './target/')
+    },
+    module: {
+        loaders: [
+            { test: /\.css$/, loader: ExtractTextPlugin.extract("style-loader", "css-loader") }
+        ]
+    },
+    plugins: [
+        new ExtractTextPlugin("./target-public/bundle.css")
+    ]
+};
+
+
+
+
+
+
+
 gulp.task('default', ['compile-jsx', 'compile-less', 'webpack', 'html']);
-
-
-
-
-// Server Code Steps
-
-
-
 
 // Compile project source JSX for server
 gulp.task("compile-jsx", ['install-common-modules'], function () {
@@ -37,30 +55,6 @@ gulp.task("install-common-modules",  function(){
 	return gulp.src("../rf-ui/lib/**/*")
 		.pipe(gulp.dest('node_modules/rf-ui'))
 });
-
-
-
-
-
-
-var WEBPACK_CONFIG = {
-    entry: "./target/app.js",
-    output: {
-        path: __dirname,
-        filename: "target-public/bundle.js"
-    },
-    resolve: {
-        root: path.resolve(__dirname, './target/')
-    },
-    module: {
-        loaders: [
-            { test: /\.css$/, loader: ExtractTextPlugin.extract("style-loader", "css-loader") }
-        ]
-    },
-    plugins: [
-        new ExtractTextPlugin("./target-public/bundle.css")
-    ]
-};
 
 // Run webpack on the /target/browser folder
 gulp.task('webpack', ['compile-jsx'], function(){
