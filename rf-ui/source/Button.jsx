@@ -7,7 +7,7 @@ export default class Button extends React.Component {
 	render() {
 		return (
 			<button className='Button'>
-				A New Butt.
+				A huge butt!
 			</button>
 		);
 	}

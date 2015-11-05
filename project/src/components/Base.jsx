@@ -1,7 +1,7 @@
 var React = require('react');
 var request = require('superagent')
 //var Button = require('rf-ui/Button');
-var Button = require('rf-ui').Button
+var Button = require('rf-ui').Button;
 
 require('./Base.less');
 
