@@ -1,17 +1,13 @@
 import React from 'react';
 
-//import './Button.less';
-
-
-import './Button.test';
-
+import './Button.less';
 
 export default class Button extends React.Component {
 
 	render() {
 		return (
 			<button className='Button'>
-				I am button.
+				A New Butt.
 			</button>
 		);
 	}

@@ -37,7 +37,7 @@ var WEBPACK_CONFIG = {
 gulp.task('default', ['compile-jsx', 'compile-less', 'webpack', 'html']);
 
 // Compile project source JSX for server
-gulp.task("compile-jsx", ['install-common-modules'], function () {
+gulp.task("compile-jsx", function () {
 	return gulp.src("src/**/*.jsx")
 		.pipe(replace('.less', '.css'))
 		.pipe(babel())
@@ -48,12 +48,6 @@ gulp.task('compile-less', function(){
 	return gulp.src("src/**/*.less")
 		.pipe(less())
 		.pipe(gulp.dest('target/'))
-});
-
-// Copy common modules to the node_modules directory
-gulp.task("install-common-modules",  function(){
-	return gulp.src("../rf-ui/lib/**/*")
-		.pipe(gulp.dest('node_modules/rf-ui'))
 });
 
 // Run webpack on the /target/browser folder

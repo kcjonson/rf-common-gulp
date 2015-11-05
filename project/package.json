@@ -13,7 +13,8 @@
     "node-jsx": "*",
     "react": "*",
     "react-dom": "^0.14.1",
-    "superagent": "*"
+    "superagent": "*",
+    "rf-ui": "../rf-ui"
   },
   "devDependencies": {
     "css-loader": "*",
@@ -26,7 +27,8 @@
     "webpack": "*"
   },
   "scripts": {
+    "preinstall": "rm -rf ./node_modules/rf-ui",
     "clean": "gulp clean",
-    "start": "gulp && node server.js"
+    "start": "npm install && gulp && node server.js"
   }
 }
