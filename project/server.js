@@ -1,15 +1,25 @@
 
+require.extensions[".css"] = function(module, filename) {
+	module._compile("module.exports = null", filename);
+};
+
+require.extensions[".less"] = function(module, filename) {
+	module._compile("module.exports = null", filename);
+};
+
+
+
 var http = require('http')
 var express = require('express');
 var fs = require('fs');
 var React = require('react');
 var ReactDOMServer = require('react-dom/server')
-var Base = require('./target/server/components/Base')
+var Base = require('./target/components/Base')
 
 
 // Create Express App
 var app = express();
-app.use("/", express.static(__dirname + "/target/public/"));
+app.use("/", express.static(__dirname + "/target-public/"));
 
 
 
@@ -23,7 +33,7 @@ var initialState = {
 
 
 
-var templateString = fs.readFileSync('./target/public/Base.html', "utf8");
+var templateString = fs.readFileSync('./target-public/Base.html', "utf8");
 var baseMarkup = ReactDOMServer.renderToString(React.createElement(Base, {user: initialState.user}));
 var pageString = insertString(templateString, 'id="react-app">', baseMarkup);
 pageString = insertString(pageString, 'id="initial-state">', JSON.stringify(initialState));

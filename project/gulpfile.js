@@ -8,105 +8,49 @@ var webpack = require("gulp-webpack");
 var del = require('del');
 
 
-gulp.task('default', ['server', 'browser', 'public']);
+gulp.task('default', ['compile-jsx', 'compile-less', 'webpack', 'html']);
 
 
 
 
 // Server Code Steps
 
-gulp.task('server', [
-	'html',
-	'compile-server-less',
-	'compile-server-jsx',
-	'install-server-common-modules-js',
-	'intall-server-common-modules-css'
-]);
 
-// Compile project source less for server
-// CSS Files choke the node imports on the server side, so 
-// we're going to rewrite them to valid JS that does nothing.
-// This is a total hack.
-gulp.task('compile-server-less', function(){
-	return gulp.src("src/**/*.less")
-		.pipe(replace(/[^]*/, 'module.exports = null;'))
-		.pipe(gulp.dest('target/server'))
-});
+
 
 // Compile project source JSX for server
-gulp.task("compile-server-jsx", ['compile-server-less', 'install-server-common-modules-js'], function () {
-	return gulp.src("src/**/*.jsx")
-		.pipe(babel())
-		.pipe(gulp.dest("target/server"));
-});
-
-// Copy common modules to the node_modules directory
-gulp.task("install-server-common-modules-js", ['intall-server-common-modules-css'], function(){
-	return gulp.src("../rf-ui/lib/**/*.js")
-		.pipe(gulp.dest('node_modules/rf-ui'))
-});
-
-// Create stubs for common module css in the node_modules directory
-gulp.task("intall-server-common-modules-css", function(){
-	return gulp.src("../rf-ui/lib/**/*.css")
-		.pipe(replace(/[^]*/, 'module.exports = null;'))
-		.pipe(gulp.dest('node_modules/rf-ui'))
-});
-
-
-
-
-
-// Browser Code Steps
-
-gulp.task('browser',[
-	'webpack',
-	'compile-browser-less',
-	'compile-browser-jsx',
-	'install-browser-common-modules'
-]);
-
-// Compile project source less for browser
-gulp.task('compile-browser-less', function() {
-	return gulp.src("src/**/*.less")
-		.pipe(less())
-		.pipe(gulp.dest('target/browser'));
-});
-
-// Compile project source JSX for browser
-gulp.task("compile-browser-jsx", ['compile-browser-less'], function () {
+gulp.task("compile-jsx", ['install-common-modules'], function () {
 	return gulp.src("src/**/*.jsx")
 		.pipe(replace('.less', '.css'))
 		.pipe(babel())
-		.pipe(gulp.dest("target/browser"));
+		.pipe(gulp.dest("target/"));
 });
 
-// Copy common modules into the we_modules folder so that webpack/browser
-// dependencies can get them.  
-// NOTE: The output from common modules should alredy be compiled, we just copy.
-// NOTE: Webpack automatically looks in the web_modules folder, no config needed.
-gulp.task("install-browser-common-modules", function(){
+gulp.task('compile-less', function(){
+	return gulp.src("src/**/*.less")
+		.pipe(less())
+		.pipe(gulp.dest('target/'))
+});
+
+// Copy common modules to the node_modules directory
+gulp.task("install-common-modules",  function(){
 	return gulp.src("../rf-ui/lib/**/*")
-		.pipe(gulp.dest('target/web_modules/rf-ui'))
-})
+		.pipe(gulp.dest('node_modules/rf-ui'))
+});
 
 
 
 
 
-
-// Public Steps  
-
-gulp.task('public', ['html', 'webpack'])
 
 var WEBPACK_CONFIG = {
-    entry: "./target/browser/app.js",
+    entry: "./target/app.js",
     output: {
         path: __dirname,
-        filename: "target/public/bundle.js"
+        filename: "target-public/bundle.js"
     },
     resolve: {
-        root: path.resolve(__dirname, './target/browser/')
+        root: path.resolve(__dirname, './target/')
     },
     module: {
         loaders: [
@@ -114,13 +58,13 @@ var WEBPACK_CONFIG = {
         ]
     },
     plugins: [
-        new ExtractTextPlugin("./target/public/bundle.css")
+        new ExtractTextPlugin("./target-public/bundle.css")
     ]
 };
 
 // Run webpack on the /target/browser folder
-gulp.task('webpack', ['install-browser-common-modules', 'compile-browser-jsx'], function(){
-	return gulp.src('./target/browser/app.js')
+gulp.task('webpack', ['compile-jsx'], function(){
+	return gulp.src('./target/app.js')
 		.pipe(webpack(WEBPACK_CONFIG))
 		.pipe(gulp.dest(''));
 });
@@ -128,11 +72,11 @@ gulp.task('webpack', ['install-browser-common-modules', 'compile-browser-jsx'], 
 // Copy the page so that we can serve it.
 gulp.task('html', function(){
 	return gulp.src("src/**/*.html")
-		.pipe(gulp.dest('target/public'));
+		.pipe(gulp.dest('target-public/'));
 });
 
 gulp.task('clean', function(){
-	del(['target/**/*', 'node_modules/rf-ui']).then(function (paths) {
+	del(['target/**/*', 'target-public/**/*', 'node_modules/rf-ui']).then(function (paths) {
 		console.log('Deleted files/folders:\n', paths.join('\n'));
 	});
 })

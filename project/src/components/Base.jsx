@@ -23,9 +23,13 @@ module.exports = React.createClass({
 			<div className='Base'>
 				<h1>Base</h1>
 				<p>Hello {this.state.user}</p>
-				<Button />
+				<Button onClick='_onButtonClick' />
 			</div>
 		)
+	},
+
+	_onClick: function() {
+		console.log('hello')
 	},
 
 	_requestData: function() {
