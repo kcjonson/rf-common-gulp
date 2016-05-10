@@ -11,7 +11,7 @@ export default class Button extends React.Component {
 	render() {
 		return (
 			<button className='Button'>
-				I am button.
+				I am a changed button.
 			</button>
 		);
 	}
